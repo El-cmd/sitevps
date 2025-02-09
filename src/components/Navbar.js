@@ -9,12 +9,13 @@ const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const menuItems = [
-    { text: 'Accueil', path: '/' },
-    { text: 'Compétences', path: '/competences' },
-    { text: 'Projets', path: '/projets' },
-    { text: 'Formation', path: '/formation' },
-    { text: 'Contact', path: '/contact' },
+  const pages = [
+    { name: 'Accueil', path: '/' },
+    { name: 'Compétences', path: '/competences' },
+    { name: 'Formation', path: '/formation' },
+    { name: 'Projets', path: '/projets' },
+    { name: 'Passions', path: '/passions' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   const handleDrawerToggle = () => {
@@ -46,9 +47,9 @@ const Navbar = () => {
             </IconButton>
           ) : (
             <div style={{ display: 'flex', gap: '1rem' }}>
-              {menuItems.map((item, index) => (
+              {pages.map((item, index) => (
                 <motion.div
-                  key={item.text}
+                  key={item.name}
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -65,7 +66,7 @@ const Navbar = () => {
                       transition: 'transform 0.2s',
                     }}
                   >
-                    {item.text}
+                    {item.name}
                   </Button>
                 </motion.div>
               ))}
@@ -87,15 +88,15 @@ const Navbar = () => {
         }}
       >
         <List>
-          {menuItems.map((item) => (
+          {pages.map((item) => (
             <ListItem
               button
-              key={item.text}
+              key={item.name}
               component={Link}
               to={item.path}
               onClick={handleDrawerToggle}
             >
-              <ListItemText primary={item.text} />
+              <ListItemText primary={item.name} />
             </ListItem>
           ))}
         </List>

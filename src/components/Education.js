@@ -7,27 +7,16 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import { motion } from 'framer-motion';
-import SchoolIcon from '@mui/icons-material/School';
+import SchoolLogo from '../assets/42_Logo.svg';
 
 const education = [
   {
-    year: '2023',
-    degree: 'Diplôme Développeur Web Full Stack',
-    school: 'École de Développement Web',
-    description: 'Formation intensive en développement web moderne. Spécialisation en React et Node.js.',
-  },
-  {
-    year: '2022',
-    degree: 'Certification JavaScript',
-    school: 'FreeCodeCamp',
-    description: 'Certification complète en JavaScript avec focus sur ES6+ et les frameworks modernes.',
-  },
-  {
-    year: '2021',
-    degree: 'Baccalauréat Scientifique',
-    school: 'Lycée',
-    description: 'Option Mathématiques et Sciences de l\'Ingénieur.',
-  },
+    year: '2023 - Présent',
+    degree: 'Formation Développeur',
+    school: 'École 42',
+    description: 'Formation intensive en programmation. Spécialisation en C, C++ et développement système.',
+    logo: SchoolLogo
+  }
 ];
 
 const Education = () => {
@@ -51,10 +40,28 @@ const Education = () => {
                 <motion.div
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.2 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                  <TimelineDot color="primary">
-                    <SchoolIcon />
+                  <TimelineDot 
+                    sx={{ 
+                      bgcolor: 'transparent',
+                      boxShadow: 'none',
+                      p: 0
+                    }}
+                  >
+                    <motion.img
+                      src={item.logo}
+                      alt={item.school}
+                      style={{ 
+                        width: '60px',
+                        height: '60px'
+                      }}
+                      whileHover={{ 
+                        scale: 1.2,
+                        rotate: 360,
+                        transition: { duration: 0.5 }
+                      }}
+                    />
                   </TimelineDot>
                 </motion.div>
                 <TimelineConnector />
@@ -63,7 +70,7 @@ const Education = () => {
                 <motion.div
                   initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.2 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
                 >
                   <Box
                     sx={{

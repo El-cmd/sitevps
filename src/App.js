@@ -6,6 +6,8 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
+import Formation from './components/Formation';
+import Passions from './components/Passions';
 import ParticlesBackground from './components/ParticlesBackground';
 import './App.css';
 
@@ -111,7 +113,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/competences" element={<Skills />} />
+            <Route path="/formation" element={<Formation />} />
             <Route path="/projets" element={<Projects />} />
+            <Route path="/passions" element={<Passions />} />
           </Routes>
         </div>
       </Router>
