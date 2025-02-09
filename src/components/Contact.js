@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Typography, Box, TextField, Button, Grid, Paper } from '@mui/material';
 import { motion } from 'framer-motion';
 import EmailIcon from '@mui/icons-material/Email';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import '../styles/hacker.css';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,29 @@ const Contact = () => {
     email: '',
     message: '',
   });
+  const [loadingText, setLoadingText] = useState('');
+  const [connectionStatus, setConnectionStatus] = useState('INITIALIZING');
+
+  useEffect(() => {
+    const text = "ESTABLISHING_SECURE_CONNECTION...";
+    let currentText = '';
+    let index = 0;
+
+    const interval = setInterval(() => {
+      if (index < text.length) {
+        currentText += text[index];
+        setLoadingText(currentText);
+        index++;
+      } else {
+        clearInterval(interval);
+        setTimeout(() => {
+          setConnectionStatus('CONNECTED');
+        }, 1000);
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -21,20 +45,36 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Ici, vous pouvez ajouter la logique d'envoi du formulaire
-    console.log(formData);
+    setConnectionStatus('SENDING');
+    setTimeout(() => {
+      setConnectionStatus('SENT');
+      console.log(formData);
+    }, 2000);
   };
 
   return (
     <Container>
+      <div className="scan-line"></div>
       <Box sx={{ pt: 12, pb: 6 }}>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <Typography variant="h2" gutterBottom align="center">
-            Contact
+          <Typography 
+            className="terminal-text" 
+            sx={{ 
+              textAlign: 'center',
+              mb: 2,
+              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+              textShadow: '0 0 10px #00ff00'
+            }}
+          >
+            {connectionStatus === 'INITIALIZING' ? (
+              <>{loadingText}<span className="cursor-blink">_</span></>
+            ) : (
+              <>SECURE_CHANNEL_ESTABLISHED<span className="cursor-blink">_</span></>
+            )}
           </Typography>
         </motion.div>
 
@@ -50,40 +90,59 @@ const Contact = () => {
                 sx={{
                   p: 4,
                   height: '100%',
-                  background: 'rgba(19, 47, 76, 0.4)',
-                  backdropFilter: 'blur(5px)',
+                  background: 'rgba(0, 255, 0, 0.05)',
+                  border: '1px solid #00ff00',
+                  boxShadow: '0 0 10px rgba(0, 255, 0, 0.3)',
                 }}
               >
-                <Typography variant="h5" gutterBottom>
-                  Restons en contact
+                <Typography className="terminal-text" variant="h5" gutterBottom>
+                  COMMUNICATION_PROTOCOLS
                 </Typography>
-                <Typography paragraph color="text.secondary">
-                  N'hésitez pas à me contacter pour discuter de vos projets ou opportunités de collaboration.
+                <Typography className="terminal-text" paragraph sx={{ opacity: 0.8 }}>
+                  ENCRYPTED_CHANNELS_AVAILABLE_FOR_CONTACT
                 </Typography>
 
                 <Box sx={{ mt: 4 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <EmailIcon sx={{ mr: 2 }} />
-                    <Typography>votre.email@exemple.com</Typography>
+                    <EmailIcon sx={{ color: '#00ff00', mr: 2 }} />
+                    <Typography className="terminal-text">
+                      valentin.loth@outlook.fr
+                    </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
                     <Button
-                      variant="contained"
+                      className="terminal-text"
                       startIcon={<LinkedInIcon />}
-                      href="https://linkedin.com"
+                      href="https://www.linkedin.com/in/valentin-loth-a7a0b0234/"
                       target="_blank"
                       rel="noopener noreferrer"
+                      sx={{
+                        color: '#00ff00',
+                        border: '1px solid #00ff00',
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                          boxShadow: '0 0 10px #00ff00',
+                        }
+                      }}
                     >
-                      LinkedIn
+                      LINKEDIN_ACCESS
                     </Button>
                     <Button
-                      variant="contained"
+                      className="terminal-text"
                       startIcon={<GitHubIcon />}
-                      href="https://github.com"
+                      href="https://github.com/El-cmd"
                       target="_blank"
                       rel="noopener noreferrer"
+                      sx={{
+                        color: '#00ff00',
+                        border: '1px solid #00ff00',
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                          boxShadow: '0 0 10px #00ff00',
+                        }
+                      }}
                     >
-                      GitHub
+                      GITHUB_ACCESS
                     </Button>
                   </Box>
                 </Box>
@@ -101,52 +160,142 @@ const Contact = () => {
                 elevation={3}
                 sx={{
                   p: 4,
-                  background: 'rgba(19, 47, 76, 0.4)',
-                  backdropFilter: 'blur(5px)',
+                  background: 'rgba(0, 255, 0, 0.05)',
+                  border: '1px solid #00ff00',
+                  boxShadow: '0 0 10px rgba(0, 255, 0, 0.3)',
                 }}
               >
+                <Typography className="terminal-text" variant="h5" gutterBottom>
+                  SEND_ENCRYPTED_MESSAGE
+                </Typography>
                 <form onSubmit={handleSubmit}>
                   <TextField
                     fullWidth
-                    label="Nom"
+                    label="IDENTIFIER"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
                     margin="normal"
                     required
-                    variant="outlined"
+                    InputProps={{
+                      className: 'terminal-text',
+                    }}
+                    InputLabelProps={{
+                      className: 'terminal-text',
+                    }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                          borderColor: '#00ff00',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: '#00ff00',
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: '#00ff00',
+                        },
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#00ff00',
+                      },
+                      '& .MuiOutlinedInput-input': {
+                        color: '#00ff00',
+                      },
+                    }}
                   />
                   <TextField
                     fullWidth
-                    label="Email"
+                    label="ENCRYPTION_KEY"
                     name="email"
                     type="email"
                     value={formData.email}
                     onChange={handleChange}
                     margin="normal"
                     required
-                    variant="outlined"
+                    InputProps={{
+                      className: 'terminal-text',
+                    }}
+                    InputLabelProps={{
+                      className: 'terminal-text',
+                    }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                          borderColor: '#00ff00',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: '#00ff00',
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: '#00ff00',
+                        },
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#00ff00',
+                      },
+                      '& .MuiOutlinedInput-input': {
+                        color: '#00ff00',
+                      },
+                    }}
                   />
                   <TextField
                     fullWidth
-                    label="Message"
+                    label="MESSAGE_CONTENT"
                     name="message"
+                    multiline
+                    rows={4}
                     value={formData.message}
                     onChange={handleChange}
                     margin="normal"
                     required
-                    multiline
-                    rows={4}
-                    variant="outlined"
+                    InputProps={{
+                      className: 'terminal-text',
+                    }}
+                    InputLabelProps={{
+                      className: 'terminal-text',
+                    }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                          borderColor: '#00ff00',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: '#00ff00',
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: '#00ff00',
+                        },
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: '#00ff00',
+                      },
+                      '& .MuiOutlinedInput-input': {
+                        color: '#00ff00',
+                      },
+                    }}
                   />
                   <Button
                     type="submit"
-                    variant="contained"
-                    size="large"
+                    variant="outlined"
                     fullWidth
-                    sx={{ mt: 3 }}
+                    className="terminal-text"
+                    sx={{
+                      mt: 3,
+                      color: '#00ff00',
+                      border: '1px solid #00ff00',
+                      '&:hover': {
+                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        boxShadow: '0 0 10px #00ff00',
+                      }
+                    }}
                   >
-                    Envoyer
+                    {connectionStatus === 'SENDING' ? (
+                      'ENCRYPTING_AND_SENDING...'
+                    ) : connectionStatus === 'SENT' ? (
+                      'MESSAGE_SENT_SUCCESSFULLY'
+                    ) : (
+                      'TRANSMIT_MESSAGE'
+                    )}
                   </Button>
                 </form>
               </Paper>

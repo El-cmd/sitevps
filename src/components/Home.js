@@ -1,157 +1,163 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Typography, Box, Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-
-const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: "easeOut" }
-};
-
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.3
-    }
-  }
-};
+import '../styles/hacker.css';
 
 const Home = () => {
+  const [loadingText, setLoadingText] = useState('');
+  const [nameText, setNameText] = useState('');
+  const [titleText, setTitleText] = useState('');
+  const [systemReady, setSystemReady] = useState(false);
+
+  useEffect(() => {
+    const loadSequence = async () => {
+      // Simulation du chargement du système
+      const text = "INITIALIZING_SYSTEM...";
+      for (let i = 0; i <= text.length; i++) {
+        setLoadingText(text.slice(0, i));
+        await new Promise(r => setTimeout(r, 100));
+      }
+      await new Promise(r => setTimeout(r, 1000));
+      
+      // Animation du nom
+      const name = "VALENTIN_LOTH";
+      for (let i = 0; i <= name.length; i++) {
+        setNameText(name.slice(0, i));
+        await new Promise(r => setTimeout(r, 100));
+      }
+      await new Promise(r => setTimeout(r, 500));
+
+      // Animation du titre
+      const title = "DEVELOPPEUR_JUNIOR";
+      for (let i = 0; i <= title.length; i++) {
+        setTitleText(title.slice(0, i));
+        await new Promise(r => setTimeout(r, 100));
+      }
+      
+      setSystemReady(true);
+    };
+
+    loadSequence();
+  }, []);
+
   return (
     <Container>
-      <motion.div
-        variants={staggerContainer}
-        initial="initial"
-        animate="animate"
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textAlign: 'center',
+          gap: 4,
+          pt: 8,
+          position: 'relative'
+        }}
       >
-        <Box
-          sx={{
-            minHeight: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            textAlign: 'center',
-            gap: 4,
-            pt: 8,
-          }}
+        <div className="scan-line"></div>
+        
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
         >
-          <motion.div
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-            whileHover={{ scale: 1.05 }}
+          <Typography 
+            className="terminal-text"
+            sx={{
+              fontSize: '1.2rem',
+              marginBottom: '2rem',
+              opacity: systemReady ? 0 : 1
+            }}
           >
-            <Typography 
-              variant="h1" 
-              component="h1" 
-              gutterBottom
-              sx={{
-                background: 'linear-gradient(45deg, #5C6BC0, #26A69A)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Valentin Loth
-            </Typography>
-          </motion.div>
+            {loadingText}<span className="cursor-blink">_</span>
+          </Typography>
 
-          <motion.div
-            variants={fadeInUp}
+          <Typography 
+            variant="h1" 
+            className="terminal-text glitch"
+            sx={{
+              fontSize: { xs: '2rem', sm: '3rem', md: '4rem' },
+              marginBottom: '1rem',
+              textShadow: '0 0 10px #00ff00, 0 0 20px #00ff00'
+            }}
           >
-            <Typography variant="h1" component="h1" gutterBottom>
-              Développeur Junior
-            </Typography>
-          </motion.div>
+            {nameText}<span className="cursor-blink">_</span>
+          </Typography>
 
-          <motion.div
-            variants={fadeInUp}
+          <Typography 
+            variant="h2"
+            className="terminal-text"
+            sx={{
+              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+              marginBottom: '2rem'
+            }}
           >
-            <Typography 
-              variant="h5" 
-              color="text.secondary" 
-              paragraph
-              sx={{ maxWidth: 600 }}
-            >
-              Passionné par le développement web et les nouvelles technologies
-            </Typography>
-          </motion.div>
+            {titleText}<span className="cursor-blink">_</span>
+          </Typography>
 
-          <motion.div
-            variants={fadeInUp}
-          >
-            <Typography 
-              variant="body1" 
-              paragraph 
-              sx={{ maxWidth: 600 }}
-            >
-              Fraîchement diplômé et à la recherche de nouveaux défis passionnants.
-              Je combine créativité et expertise technique pour créer des expériences web innovantes.
-            </Typography>
-          </motion.div>
-
-          <motion.div
-            variants={fadeInUp}
-          >
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
+          {systemReady && (
+            <>
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
               >
-                <Button
-                  component={Link}
-                  to="/projets"
-                  variant="contained"
-                  size="large"
-                  sx={{
-                    borderRadius: 2,
-                    textTransform: 'none',
-                    fontSize: '1.1rem',
-                    px: 4,
-                    py: 1.5,
-                    background: 'linear-gradient(45deg, #5C6BC0 30%, #26A69A 90%)',
-                    boxShadow: '0 3px 5px 2px rgba(92, 107, 192, .3)',
-                    '&:hover': {
-                      background: 'linear-gradient(45deg, #26A69A 30%, #5C6BC0 90%)',
-                    }
-                  }}
+                <Typography 
+                  className="terminal-text"
+                  sx={{ marginBottom: '2rem' }}
                 >
-                  Voir mes projets
-                </Button>
+                  STATUS: ONLINE<br />
+                  LOCATION: FRANCE<br />
+                  MISSION: DÉVELOPPEMENT_WEB && NOUVELLES_TECHNOLOGIES
+                </Typography>
               </motion.div>
-              
+
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1 }}
               >
-                <Button
-                  component={Link}
-                  to="/contact"
-                  variant="outlined"
-                  size="large"
-                  sx={{
-                    borderRadius: 2,
-                    textTransform: 'none',
-                    fontSize: '1.1rem',
-                    px: 4,
-                    py: 1.5,
-                    borderColor: '#5C6BC0',
-                    color: '#5C6BC0',
-                    '&:hover': {
-                      borderColor: '#26A69A',
-                      color: '#26A69A',
-                      backgroundColor: 'rgba(38, 166, 154, 0.1)',
-                    }
-                  }}
-                >
-                  Me contacter
-                </Button>
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <Button
+                    component={Link}
+                    to="/projets"
+                    className="terminal-text"
+                    sx={{
+                      border: '1px solid #00ff00',
+                      color: '#00ff00',
+                      padding: '10px 20px',
+                      '&:hover': {
+                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        boxShadow: '0 0 10px #00ff00',
+                      }
+                    }}
+                  >
+                    VOIR_PROJETS
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/contact"
+                    className="terminal-text"
+                    sx={{
+                      border: '1px solid #00ff00',
+                      color: '#00ff00',
+                      padding: '10px 20px',
+                      '&:hover': {
+                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        boxShadow: '0 0 10px #00ff00',
+                      }
+                    }}
+                  >
+                    ÉTABLIR_CONNEXION
+                  </Button>
+                </Box>
               </motion.div>
-            </Box>
-          </motion.div>
-        </Box>
-      </motion.div>
+            </>
+          )}
+        </motion.div>
+      </Box>
     </Container>
   );
 };

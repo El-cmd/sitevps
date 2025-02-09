@@ -1,122 +1,209 @@
-import React from 'react';
-import { Container, Typography, Grid, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Container, Box } from '@mui/material';
 import { motion } from 'framer-motion';
-import HtmlIcon from '@mui/icons-material/Html';
-import JavascriptIcon from '@mui/icons-material/Javascript';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import { FaDocker, FaPython, FaLinux, FaReact, FaNodeJs, FaServer } from 'react-icons/fa';
-import { SiDjango, SiC, SiCplusplus, SiGnubash } from 'react-icons/si';
-
-const iconAnimation = {
-  animate: {
-    y: [0, -5, 0],
-    rotate: [-5, 5, -5],
-    transition: {
-      duration: 4,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  }
-};
-
-const starAnimation = {
-  initial: { scale: 0 },
-  animate: { scale: 1 },
-  transition: {
-    type: "spring",
-    stiffness: 260,
-    damping: 20
-  }
-};
-
-const skills = [
-  { name: 'C', level: 3, icon: <SiC size={60} color="#A8B9CC" /> },
-  { name: 'C++', level: 3, icon: <SiCplusplus size={60} color="#00599C" /> },
-  { name: 'JavaScript', level: 2, icon: <JavascriptIcon sx={{ fontSize: 60, color: '#F7DF1E' }} /> },
-  { name: 'React.js', level: 2, icon: <FaReact size={60} color="#61DAFB" /> },
-  { name: 'Node.js', level: 2, icon: <FaNodeJs size={60} color="#339933" /> },
-  { name: 'Python', level: 1, icon: <FaPython size={60} color="#3776AB" /> },
-  { name: 'Git', level: 2, icon: <GitHubIcon sx={{ fontSize: 60, color: '#F05032' }} /> },
-  { name: 'HTML/CSS', level: 2, icon: <HtmlIcon sx={{ fontSize: 60, color: '#E44D26' }} /> },
-  { name: 'Docker', level: 2, icon: <FaDocker size={60} color="#2496ED" /> },
-  { name: 'Django', level: 1, icon: <SiDjango size={60} color="#092E20" /> },
-  { name: 'Shell', level: 2, icon: <SiGnubash size={60} color="#4EAA25" /> },
-  { name: 'VM', level: 2, icon: <FaServer size={60} color="#183A61" /> },
-  { name: 'Linux', level: 2, icon: <FaLinux size={60} color="#FCC624" /> },
-];
+import '../styles/hacker.css';
 
 const Skills = () => {
-  const renderStars = (level) => {
-    return [...Array(3)].map((_, index) => (
-      <motion.div
-        key={index}
-        initial="initial"
-        animate="animate"
-        variants={starAnimation}
-        transition={{ delay: index * 0.1 }}
-      >
-        {index < level ? 
-          <StarIcon sx={{ color: '#FFD700', fontSize: 30 }} /> : 
-          <StarBorderIcon sx={{ color: '#FFD700', fontSize: 30 }} />}
-      </motion.div>
-    ));
+  const [loadingText, setLoadingText] = useState('');
+  const [loadedSkills, setLoadedSkills] = useState([]);
+  const [activeSkill, setActiveSkill] = useState(null);
+
+  const skills = [
+    { 
+      category: 'PROGRAMMING_LANGUAGES', 
+      items: [
+        { name: 'JavaScript', level: 85 },
+        { name: 'Python', level: 80 },
+        { name: 'C++', level: 90 },
+        { name: 'Java', level: 75 }
+      ]
+    },
+    { 
+      category: 'WEB_TECHNOLOGIES', 
+      items: [
+        { name: 'React.js', level: 88 },
+        { name: 'Node.js', level: 82 },
+        { name: 'HTML5', level: 95 },
+        { name: 'CSS3', level: 90 }
+      ]
+    },
+    { 
+      category: 'DATABASE_SYSTEMS', 
+      items: [
+        { name: 'MongoDB', level: 78 },
+        { name: 'MySQL', level: 85 },
+        { name: 'PostgreSQL', level: 80 }
+      ]
+    },
+    { 
+      category: 'TOOLS_AND_FRAMEWORKS', 
+      items: [
+        { name: 'Git', level: 92 },
+        { name: 'Docker', level: 85 },
+        { name: 'AWS', level: 75 },
+        { name: 'Linux', level: 88 }
+      ]
+    }
+  ];
+
+  useEffect(() => {
+    const text = "ANALYZING_SKILL_MATRIX...";
+    let currentText = '';
+    let index = 0;
+
+    const interval = setInterval(() => {
+      if (index < text.length) {
+        currentText += text[index];
+        setLoadingText(currentText);
+        index++;
+      } else {
+        clearInterval(interval);
+        loadSkillsSequentially();
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadSkillsSequentially = async () => {
+    for (const skillGroup of skills) {
+      for (const skill of skillGroup.items) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        setLoadedSkills(prev => [...prev, skill.name]);
+      }
+    }
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container>
+      <div className="scan-line"></div>
       <Box sx={{ pt: 12, pb: 6 }}>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <Typography variant="h2" gutterBottom align="center">
-            Compétences
-          </Typography>
+          <h2 
+            className="terminal-text" 
+            style={{
+              textAlign: 'center',
+              marginBottom: '2rem',
+              fontSize: 'calc(1.5rem + 1vw)',
+              textShadow: '0 0 10px #00ff00'
+            }}
+          >
+            {loadedSkills.length < skills.reduce((acc, group) => acc + group.items.length, 0) ? (
+              <>{loadingText}<span className="cursor-blink">_</span></>
+            ) : (
+              <>SKILL_MATRIX_ANALYZED<span className="cursor-blink">_</span></>
+            )}
+          </h2>
         </motion.div>
 
-        <Grid container spacing={6} sx={{ mt: 2 }}>
-          {skills.map((skill, index) => (
-            <Grid item xs={12} sm={6} md={4} key={skill.name}>
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+        <div className="skills-grid">
+          {skills.map((skillGroup, groupIndex) => (
+            <motion.div
+              key={groupIndex}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: groupIndex * 0.2 }}
+              className="skill-group"
+              style={{
+                padding: '20px',
+                border: '1px solid #00ff00',
+                background: 'rgba(0, 255, 0, 0.05)',
+                boxShadow: '0 0 10px rgba(0, 255, 0, 0.3)',
+                marginBottom: '20px'
+              }}
+            >
+              <h3 
+                className="terminal-text" 
+                style={{
+                  marginBottom: '1rem',
+                  textShadow: '0 0 5px #00ff00'
+                }}
               >
-                <Box 
-                  sx={{ 
-                    display: 'flex', 
-                    flexDirection: 'column',
-                    gap: 2,
-                    alignItems: 'center',
-                    '&:hover .skill-icon': {
-                      transform: 'scale(1.2) rotate(360deg)',
-                      transition: 'all 0.5s ease-in-out',
-                    }
-                  }}
-                >
-                  <motion.div
-                    className="skill-icon"
-                    variants={iconAnimation}
-                    animate="animate"
-                    style={{ display: 'inline-flex' }}
-                  >
-                    {skill.icon}
-                  </motion.div>
-                  <Typography variant="h6" align="center">
-                    {skill.name}
-                  </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                    {renderStars(skill.level)}
-                  </Box>
-                </Box>
-              </motion.div>
-            </Grid>
+                [{skillGroup.category}]
+              </h3>
+              <div className="skill-list">
+                {skillGroup.items.map((skill, skillIndex) => {
+                  const isLoaded = loadedSkills.includes(skill.name);
+                  const isActive = activeSkill === skill.name;
+
+                  return (
+                    <motion.div
+                      key={skillIndex}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                      transition={{ delay: skillIndex * 0.1 }}
+                      onMouseEnter={() => setActiveSkill(skill.name)}
+                      onMouseLeave={() => setActiveSkill(null)}
+                      className={isActive ? 'glitch' : ''}
+                    >
+                      <div 
+                        className="terminal-text"
+                        style={{ 
+                          marginBottom: '0.5rem',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center'
+                        }}
+                      >
+                        <span>> {skill.name}</span>
+                        <span style={{ opacity: 0.8 }}>{skill.level}%</span>
+                      </div>
+                      <div 
+                        className="skill-progress"
+                        style={{
+                          height: '4px',
+                          background: 'rgba(0, 255, 0, 0.1)',
+                          marginBottom: '15px',
+                          position: 'relative',
+                          overflow: 'hidden'
+                        }}
+                      >
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${skill.level}%` }}
+                          transition={{ duration: 1, delay: isLoaded ? 0.2 : 0 }}
+                          className="skill-progress-bar"
+                          style={{
+                            height: '100%',
+                            background: '#00ff00',
+                            boxShadow: '0 0 10px #00ff00',
+                            animation: isActive ? 'progressBlink 1s infinite' : 'none'
+                          }}
+                        />
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
           ))}
-        </Grid>
+        </div>
       </Box>
+
+      <style jsx>{`
+        .skills-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 20px;
+          padding: 20px;
+        }
+
+        @keyframes progressBlink {
+          0% { opacity: 0.5; }
+          50% { opacity: 1; }
+          100% { opacity: 0.5; }
+        }
+
+        @media (max-width: 600px) {
+          .skills-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </Container>
   );
 };

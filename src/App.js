@@ -8,65 +8,66 @@ import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Formation from './components/Formation';
 import Passions from './components/Passions';
-import ParticlesBackground from './components/ParticlesBackground';
+import './styles/hacker.css';
 import './App.css';
 
 const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#64B5F6',
-      light: '#90CAF9',
-      dark: '#42A5F5',
+      main: '#00ff00',
+      light: '#33ff33',
+      dark: '#00cc00',
     },
     secondary: {
-      main: '#81C784',
-      light: '#A5D6A7',
-      dark: '#66BB6A',
+      main: '#003300',
+      light: '#004d00',
+      dark: '#001a00',
     },
     background: {
-      default: '#0A1929',
-      paper: 'rgba(13, 27, 42, 0.7)',
+      default: '#0a0a0a',
+      paper: 'rgba(0, 51, 0, 0.7)',
     },
     text: {
-      primary: '#E3F2FD',
-      secondary: '#90CAF9',
+      primary: '#00ff00',
+      secondary: '#00cc00',
     },
   },
   typography: {
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Share Tech Mono", monospace',
     h1: {
       fontSize: '3.5rem',
-      fontWeight: 600,
-      letterSpacing: '-0.02em',
-      lineHeight: 1.2,
+      fontWeight: 400,
+      letterSpacing: '0.1em',
+      textShadow: '0 0 10px #00ff00, 0 0 20px #00ff00',
     },
     h2: {
       fontSize: '2.8rem',
-      fontWeight: 600,
-      letterSpacing: '-0.02em',
-      lineHeight: 1.2,
+      fontWeight: 400,
+      letterSpacing: '0.1em',
+      textShadow: '0 0 8px #00ff00',
     },
-    h5: {
-      letterSpacing: '0.02em',
-      fontWeight: 500,
+    body1: {
+      fontFamily: '"Share Tech Mono", monospace',
+      letterSpacing: '0.05em',
     },
     button: {
-      fontWeight: 500,
-      letterSpacing: '0.02em',
+      fontFamily: '"Share Tech Mono", monospace',
+      letterSpacing: '0.1em',
     },
   },
   components: {
     MuiCard: {
       styleOverrides: {
         root: {
-          background: 'rgba(13, 27, 42, 0.7)',
+          background: 'rgba(0, 51, 0, 0.2)',
           backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(144, 202, 249, 0.1)',
+          border: '1px solid #00ff00',
+          boxShadow: '0 0 10px rgba(0, 255, 0, 0.3)',
           transition: 'all 0.3s ease-in-out',
           '&:hover': {
-            border: '1px solid rgba(144, 202, 249, 0.2)',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #00ff00',
+            boxShadow: '0 0 20px rgba(0, 255, 0, 0.5)',
           },
         },
       },
@@ -74,27 +75,27 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '4px',
-          textTransform: 'none',
+          borderRadius: '0',
+          textTransform: 'uppercase',
           padding: '10px 24px',
           transition: 'all 0.2s ease-in-out',
           '&:hover': {
-            transform: 'translateY(-1px)',
+            textShadow: '0 0 10px #00ff00',
           },
         },
         contained: {
-          background: 'linear-gradient(45deg, #64B5F6 30%, #81C784 90%)',
-          boxShadow: 'none',
+          background: '#003300',
+          border: '1px solid #00ff00',
           '&:hover': {
-            background: 'linear-gradient(45deg, #42A5F5 30%, #66BB6A 90%)',
-            boxShadow: '0 3px 10px rgba(0, 0, 0, 0.2)',
+            background: '#004d00',
+            boxShadow: '0 0 15px rgba(0, 255, 0, 0.5)',
           },
         },
         outlined: {
-          borderColor: '#64B5F6',
+          borderColor: '#00ff00',
           '&:hover': {
-            borderColor: '#90CAF9',
-            backgroundColor: 'rgba(144, 202, 249, 0.08)',
+            borderColor: '#00ff00',
+            backgroundColor: 'rgba(0, 255, 0, 0.1)',
           },
         },
       },
@@ -108,7 +109,7 @@ function App() {
       <CssBaseline />
       <Router>
         <div className="app">
-          <ParticlesBackground />
+          <div className="scan-line"></div>
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
