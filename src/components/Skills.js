@@ -1,50 +1,61 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Container, Box } from '@mui/material';
 import { motion } from 'framer-motion';
 import '../styles/hacker.css';
+import '../styles/Skills.css';
 
 const Skills = () => {
   const [loadingText, setLoadingText] = useState('');
   const [loadedSkills, setLoadedSkills] = useState([]);
   const [activeSkill, setActiveSkill] = useState(null);
 
-  const skills = [
+  const skills = useMemo(() => [
     { 
       category: 'PROGRAMMING_LANGUAGES', 
       items: [
-        { name: 'JavaScript', level: 85 },
-        { name: 'Python', level: 80 },
         { name: 'C++', level: 90 },
-        { name: 'Java', level: 75 }
+        { name: 'C', level: 90 },
+        { name: 'Python', level: 40 },
+        { name: 'JavaScript', level: 40 }
       ]
     },
     { 
       category: 'WEB_TECHNOLOGIES', 
       items: [
-        { name: 'React.js', level: 88 },
-        { name: 'Node.js', level: 82 },
-        { name: 'HTML5', level: 95 },
-        { name: 'CSS3', level: 90 }
+        { name: 'React.js', level: 20 },
+        { name: 'Node.js', level: 20 },
+        { name: 'HTML5/CSS3', level: 80  },
+        { name: 'DJango/API REST', level: 60 }
       ]
     },
     { 
       category: 'DATABASE_SYSTEMS', 
       items: [
-        { name: 'MongoDB', level: 78 },
-        { name: 'MySQL', level: 85 },
-        { name: 'PostgreSQL', level: 80 }
+        { name: 'MongoDB', level: 50 },
+        { name: 'MySQL', level: 50 },
+        { name: 'PostgreSQL', level: 50 }
       ]
     },
     { 
       category: 'TOOLS_AND_FRAMEWORKS', 
       items: [
-        { name: 'Git', level: 92 },
-        { name: 'Docker', level: 85 },
-        { name: 'AWS', level: 75 },
-        { name: 'Linux', level: 88 }
+        { name: 'Git', level: 90 },
+        { name: 'Docker/Dev Ops', level: 80 },
+        { name: 'IA', level: 150 },
+        { name: 'Linux', level: 90 },
+        { name: 'Cybersecurity', level: 10 }
       ]
     }
-  ];
+  ], []);
+
+  const loadSkillsSequentially = useCallback(async () => {
+    for (const skillGroup of skills) {
+      for (const skill of skillGroup.items) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        setLoadedSkills(prev => [...prev, skill.name]);
+      }
+    }
+  }, [skills, setLoadedSkills]);
 
   useEffect(() => {
     const text = "ANALYZING_SKILL_MATRIX...";
@@ -63,21 +74,12 @@ const Skills = () => {
     }, 100);
 
     return () => clearInterval(interval);
-  }, []);
-
-  const loadSkillsSequentially = async () => {
-    for (const skillGroup of skills) {
-      for (const skill of skillGroup.items) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        setLoadedSkills(prev => [...prev, skill.name]);
-      }
-    }
-  };
+  }, [loadSkillsSequentially]);
 
   return (
     <Container>
       <div className="scan-line"></div>
-      <Box sx={{ pt: 12, pb: 6 }}>
+      <Box sx={{ pt: 8, pb: 6 }}>
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -107,22 +109,9 @@ const Skills = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: groupIndex * 0.2 }}
-              className="skill-group"
-              style={{
-                padding: '20px',
-                border: '1px solid #00ff00',
-                background: 'rgba(0, 255, 0, 0.05)',
-                boxShadow: '0 0 10px rgba(0, 255, 0, 0.3)',
-                marginBottom: '20px'
-              }}
+              className="skill-card"
             >
-              <h3 
-                className="terminal-text" 
-                style={{
-                  marginBottom: '1rem',
-                  textShadow: '0 0 5px #00ff00'
-                }}
-              >
+              <h3 className="skill-title terminal-text">
                 [{skillGroup.category}]
               </h3>
               <div className="skill-list">
@@ -138,39 +127,19 @@ const Skills = () => {
                       transition={{ delay: skillIndex * 0.1 }}
                       onMouseEnter={() => setActiveSkill(skill.name)}
                       onMouseLeave={() => setActiveSkill(null)}
-                      className={isActive ? 'glitch' : ''}
+                      className="skill-item"
                     >
-                      <div 
-                        className="terminal-text"
-                        style={{ 
-                          marginBottom: '0.5rem',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center'
-                        }}
-                      >
-                        <span>> {skill.name}</span>
+                      <div className="skill-name terminal-text">
+                        <span>{skill.name}</span>
                         <span style={{ opacity: 0.8 }}>{skill.level}%</span>
                       </div>
-                      <div 
-                        className="skill-progress"
-                        style={{
-                          height: '4px',
-                          background: 'rgba(0, 255, 0, 0.1)',
-                          marginBottom: '15px',
-                          position: 'relative',
-                          overflow: 'hidden'
-                        }}
-                      >
+                      <div className="progress-bar">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${skill.level}%` }}
                           transition={{ duration: 1, delay: isLoaded ? 0.2 : 0 }}
-                          className="skill-progress-bar"
+                          className="progress-fill"
                           style={{
-                            height: '100%',
-                            background: '#00ff00',
-                            boxShadow: '0 0 10px #00ff00',
                             animation: isActive ? 'progressBlink 1s infinite' : 'none'
                           }}
                         />
@@ -183,27 +152,6 @@ const Skills = () => {
           ))}
         </div>
       </Box>
-
-      <style jsx>{`
-        .skills-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 20px;
-          padding: 20px;
-        }
-
-        @keyframes progressBlink {
-          0% { opacity: 0.5; }
-          50% { opacity: 1; }
-          100% { opacity: 0.5; }
-        }
-
-        @media (max-width: 600px) {
-          .skills-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
     </Container>
   );
 };

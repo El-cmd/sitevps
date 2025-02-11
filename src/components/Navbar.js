@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -11,14 +11,15 @@ const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const pages = [
+  const mainPages = [
     { name: 'INIT_HOME', path: '/' },
     { name: 'SCAN_SKILLS', path: '/competences' },
     { name: 'ACCESS_EDU', path: '/formation' },
     { name: 'VIEW_PROJECTS', path: '/projets' },
-    { name: 'LOAD_HOBBIES', path: '/passions' },
-    { name: 'CONNECT', path: '/contact' },
+    { name: 'GET_SERVICES', path: '/services' },
   ];
+
+  const connectPage = { name: 'CONNECT', path: '/contact' };
 
   useEffect(() => {
     const text = "SYSTEM_READY>";
@@ -42,6 +43,57 @@ const Navbar = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const drawer = (
+    <List>
+      {mainPages.map((item) => (
+        <ListItem 
+          key={item.name} 
+          component={Link} 
+          to={item.path}
+          onClick={handleDrawerToggle}
+          sx={{
+            '&:hover': {
+              backgroundColor: 'rgba(0, 255, 0, 0.1)',
+            }
+          }}
+        >
+          <ListItemText 
+            primary={item.name} 
+            sx={{ 
+              color: '#00ff00',
+              '& .MuiTypography-root': {
+                fontFamily: 'Share Tech Mono',
+              }
+            }} 
+          />
+        </ListItem>
+      ))}
+      <ListItem 
+        key={connectPage.name} 
+        component={Link} 
+        to={connectPage.path}
+        onClick={handleDrawerToggle}
+        sx={{
+          marginTop: 2,
+          borderTop: '1px solid #00ff00',
+          '&:hover': {
+            backgroundColor: 'rgba(0, 255, 0, 0.1)',
+          }
+        }}
+      >
+        <ListItemText 
+          primary={connectPage.name} 
+          sx={{ 
+            color: '#00ff00',
+            '& .MuiTypography-root': {
+              fontFamily: 'Share Tech Mono',
+            }
+          }} 
+        />
+      </ListItem>
+    </List>
+  );
+
   return (
     <>
       <AppBar 
@@ -53,26 +105,55 @@ const Navbar = () => {
           boxShadow: '0 0 10px rgba(0, 255, 0, 0.3)'
         }}
       >
-        <Toolbar>
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="terminal-text"
-          >
-            <Typography 
-              variant="h6" 
-              component="div" 
-              sx={{ 
-                flexGrow: 1, 
-                marginRight: 2,
-                fontFamily: 'Share Tech Mono',
-                letterSpacing: '0.1em'
-              }}
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="terminal-text"
             >
-              {terminalText}<span className="cursor-blink">_</span>
-            </Typography>
-          </motion.div>
+              <Typography 
+                variant="h6" 
+                component="div" 
+                sx={{ 
+                  marginRight: 2,
+                  fontFamily: 'Share Tech Mono',
+                  letterSpacing: '0.1em'
+                }}
+              >
+                {terminalText}<span className="cursor-blink">_</span>
+              </Typography>
+            </motion.div>
+
+            {!isMobile && (
+              <Box sx={{ display: 'flex', gap: '1rem' }}>
+                {mainPages.map((item, index) => (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <Button
+                      component={Link}
+                      to={item.path}
+                      sx={{
+                        color: '#00ff00',
+                        fontFamily: 'Share Tech Mono',
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                          textShadow: '0 0 5px #00ff00'
+                        }
+                      }}
+                    >
+                      {item.name}
+                    </Button>
+                  </motion.div>
+                ))}
+              </Box>
+            )}
+          </Box>
 
           {isMobile ? (
             <IconButton
@@ -90,35 +171,28 @@ const Navbar = () => {
               <MenuIcon />
             </IconButton>
           ) : (
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              {pages.map((item, index) => (
-                <motion.div
-                  key={item.name}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <Button
-                    component={Link}
-                    to={item.path}
-                    className="nav-button glitch"
-                    sx={{
-                      color: '#00ff00',
-                      fontFamily: 'Share Tech Mono',
-                      border: '1px solid transparent',
-                      '&:hover': {
-                        border: '1px solid #00ff00',
-                        boxShadow: '0 0 10px rgba(0, 255, 0, 0.3)',
-                        textShadow: '0 0 5px #00ff00',
-                        backgroundColor: 'rgba(0, 255, 0, 0.1)'
-                      }
-                    }}
-                  >
-                    {item.name}
-                  </Button>
-                </motion.div>
-              ))}
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: mainPages.length * 0.1 }}
+            >
+              <Button
+                component={Link}
+                to={connectPage.path}
+                sx={{
+                  color: '#00ff00',
+                  fontFamily: 'Share Tech Mono',
+                  border: '1px solid #00ff00',
+                  '&:hover': {
+                    backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                    textShadow: '0 0 5px #00ff00',
+                    boxShadow: '0 0 10px rgba(0, 255, 0, 0.3)'
+                  }
+                }}
+              >
+                {connectPage.name}
+              </Button>
+            </motion.div>
           )}
         </Toolbar>
       </AppBar>
@@ -128,45 +202,20 @@ const Navbar = () => {
         anchor="right"
         open={mobileOpen}
         onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true,
+        }}
         sx={{
           '& .MuiDrawer-paper': {
             width: 240,
-            background: 'rgba(0, 20, 0, 0.95)',
+            backgroundColor: 'rgba(0, 20, 0, 0.95)',
             borderLeft: '1px solid #00ff00',
-            boxShadow: '-5px 0 15px rgba(0, 255, 0, 0.2)'
-          }
+          },
         }}
       >
-        <List>
-          {pages.map((item) => (
-            <ListItem
-              button
-              key={item.name}
-              component={Link}
-              to={item.path}
-              onClick={handleDrawerToggle}
-              sx={{
-                color: '#00ff00',
-                fontFamily: 'Share Tech Mono',
-                '&:hover': {
-                  backgroundColor: 'rgba(0, 255, 0, 0.1)',
-                  textShadow: '0 0 5px #00ff00'
-                }
-              }}
-            >
-              <ListItemText 
-                primary={item.name}
-                sx={{
-                  '& .MuiTypography-root': {
-                    fontFamily: 'Share Tech Mono',
-                    letterSpacing: '0.1em'
-                  }
-                }}
-              />
-            </ListItem>
-          ))}
-        </List>
+        {drawer}
       </Drawer>
+      <Toolbar />
     </>
   );
 };

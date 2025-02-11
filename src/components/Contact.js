@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, TextField, Button, Grid, Paper } from '@mui/material';
+import { Container, Typography, Box, TextField, Button, Grid, Paper, Snackbar, Alert } from '@mui/material';
 import { motion } from 'framer-motion';
 import EmailIcon from '@mui/icons-material/Email';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PhoneIcon from '@mui/icons-material/Phone';
+import emailjs from '@emailjs/browser';
 import '../styles/hacker.css';
 
 const Contact = () => {
@@ -14,6 +17,11 @@ const Contact = () => {
   });
   const [loadingText, setLoadingText] = useState('');
   const [connectionStatus, setConnectionStatus] = useState('INITIALIZING');
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
 
   useEffect(() => {
     const text = "ESTABLISHING_SECURE_CONNECTION...";
@@ -33,6 +41,9 @@ const Contact = () => {
       }
     }, 100);
 
+    // Initialize EmailJS
+    emailjs.init("P8NSyKwfHXep4XkdD");
+
     return () => clearInterval(interval);
   }, []);
 
@@ -43,13 +54,44 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setConnectionStatus('SENDING');
-    setTimeout(() => {
-      setConnectionStatus('SENT');
-      console.log(formData);
-    }, 2000);
+
+    try {
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        to_name: 'Valentin Loth',
+      };
+
+      await emailjs.send(
+        'service_0uzfjds',
+        'template_rhgkdb5',
+        templateParams
+      );
+
+      setSnackbar({
+        open: true,
+        message: 'Message sent successfully!',
+        severity: 'success'
+      });
+      setFormData({ name: '', email: '', message: '' });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setSnackbar({
+        open: true,
+        message: 'Failed to send message. Please try again.',
+        severity: 'error'
+      });
+    } finally {
+      setConnectionStatus('CONNECTED');
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -96,24 +138,36 @@ const Contact = () => {
                 }}
               >
                 <Typography className="terminal-text" variant="h5" gutterBottom>
-                  COMMUNICATION_PROTOCOLS
+                  CONTACT_PROTOCOLS
                 </Typography>
                 <Typography className="terminal-text" paragraph sx={{ opacity: 0.8 }}>
-                  ENCRYPTED_CHANNELS_AVAILABLE_FOR_CONTACT
+                  AVAILABLE_COMMUNICATION_CHANNELS
                 </Typography>
 
                 <Box sx={{ mt: 4 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                     <EmailIcon sx={{ color: '#00ff00', mr: 2 }} />
                     <Typography className="terminal-text">
-                      valentin.loth@outlook.fr
+                      lothvalentin@gmail.com
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <LocationOnIcon sx={{ color: '#00ff00', mr: 2 }} />
+                    <Typography className="terminal-text">
+                      Paris, France
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                    <PhoneIcon sx={{ color: '#00ff00', mr: 2 }} />
+                    <Typography className="terminal-text">
+                      06 29 95 15 86 (WhatsApp only)
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
                     <Button
                       className="terminal-text"
                       startIcon={<LinkedInIcon />}
-                      href="https://www.linkedin.com/in/valentin-loth-a7a0b0234/"
+                      href="https://www.linkedin.com/in/loth-valentin-50378a231/"
                       target="_blank"
                       rel="noopener noreferrer"
                       sx={{
@@ -125,7 +179,7 @@ const Contact = () => {
                         }
                       }}
                     >
-                      LINKEDIN_ACCESS
+                      LINKEDIN
                     </Button>
                     <Button
                       className="terminal-text"
@@ -142,7 +196,7 @@ const Contact = () => {
                         }
                       }}
                     >
-                      GITHUB_ACCESS
+                      GITHUB
                     </Button>
                   </Box>
                 </Box>
@@ -166,12 +220,12 @@ const Contact = () => {
                 }}
               >
                 <Typography className="terminal-text" variant="h5" gutterBottom>
-                  SEND_ENCRYPTED_MESSAGE
+                  SEND_A_MESSAGE
                 </Typography>
                 <form onSubmit={handleSubmit}>
                   <TextField
                     fullWidth
-                    label="IDENTIFIER"
+                    label="NAME"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
@@ -205,7 +259,7 @@ const Contact = () => {
                   />
                   <TextField
                     fullWidth
-                    label="ENCRYPTION_KEY"
+                    label="EMAIL"
                     name="email"
                     type="email"
                     value={formData.email}
@@ -240,14 +294,14 @@ const Contact = () => {
                   />
                   <TextField
                     fullWidth
-                    label="MESSAGE_CONTENT"
+                    label="MESSAGE"
                     name="message"
-                    multiline
-                    rows={4}
                     value={formData.message}
                     onChange={handleChange}
                     margin="normal"
                     required
+                    multiline
+                    rows={4}
                     InputProps={{
                       className: 'terminal-text',
                     }}
@@ -276,11 +330,11 @@ const Contact = () => {
                   />
                   <Button
                     type="submit"
-                    variant="outlined"
                     fullWidth
-                    className="terminal-text"
+                    variant="outlined"
                     sx={{
                       mt: 3,
+                      mb: 2,
                       color: '#00ff00',
                       border: '1px solid #00ff00',
                       '&:hover': {
@@ -288,14 +342,9 @@ const Contact = () => {
                         boxShadow: '0 0 10px #00ff00',
                       }
                     }}
+                    className="terminal-text"
                   >
-                    {connectionStatus === 'SENDING' ? (
-                      'ENCRYPTING_AND_SENDING...'
-                    ) : connectionStatus === 'SENT' ? (
-                      'MESSAGE_SENT_SUCCESSFULLY'
-                    ) : (
-                      'TRANSMIT_MESSAGE'
-                    )}
+                    {connectionStatus === 'SENDING' ? 'SENDING...' : 'SEND_MESSAGE'}
                   </Button>
                 </form>
               </Paper>
@@ -303,6 +352,16 @@ const Contact = () => {
           </Grid>
         </Grid>
       </Box>
+      <Snackbar 
+        open={snackbar.open} 
+        autoHideDuration={6000} 
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

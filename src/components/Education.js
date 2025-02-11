@@ -3,6 +3,7 @@ import { Container, Box, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { ReactComponent as SchoolLogo } from '../assets/42_Logo.svg';
 import '../styles/hacker.css';
+import '../styles/Education.css';
 
 const education = [
   {
@@ -249,19 +250,6 @@ const Education = () => {
           </div>
         )}
       </Box>
-
-      <style jsx>{`
-        .education-container {
-          max-width: 800px;
-          margin: 0 auto;
-        }
-
-        @media (max-width: 600px) {
-          .education-container {
-            padding: 0 1rem;
-          }
-        }
-      `}</style>
     </Container>
   );
 };

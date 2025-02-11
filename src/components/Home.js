@@ -29,7 +29,7 @@ const Home = () => {
       await new Promise(r => setTimeout(r, 500));
 
       // Animation du titre
-      const title = "DEVELOPPEUR_JUNIOR";
+      const title = "JUNIOR_DEVELOPER";
       for (let i = 0; i <= title.length; i++) {
         setTitleText(title.slice(0, i));
         await new Promise(r => setTimeout(r, 100));
@@ -109,8 +109,8 @@ const Home = () => {
                   sx={{ marginBottom: '2rem' }}
                 >
                   STATUS: ONLINE<br />
-                  LOCATION: FRANCE<br />
-                  MISSION: DÉVELOPPEMENT_WEB && NOUVELLES_TECHNOLOGIES
+                  LOCATION: FRANCE, PARIS<br />
+                  MISSION: "Trouver un stage"
                 </Typography>
               </motion.div>
 

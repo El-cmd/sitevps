@@ -7,7 +7,8 @@ import Home from './components/Home';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Formation from './components/Formation';
-import Passions from './components/Passions';
+import Services from './components/Services';
+import Contact from './components/Contact';
 import './styles/hacker.css';
 import './App.css';
 
@@ -116,7 +117,8 @@ function App() {
             <Route path="/competences" element={<Skills />} />
             <Route path="/formation" element={<Formation />} />
             <Route path="/projets" element={<Projects />} />
-            <Route path="/passions" element={<Passions />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </div>
       </Router>
