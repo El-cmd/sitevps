@@ -67,7 +67,7 @@ const Services = () => {
   }, []);
 
   return (
-    <Container maxWidth="lg" sx={{ py: 8 }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 4, sm: 6, md: 8 } }}>
       <div className="scan-line"></div>
       
       <motion.div
@@ -80,16 +80,21 @@ const Services = () => {
           className="terminal-text" 
           sx={{ 
             textAlign: 'center',
-            mb: 6,
-            fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
-            textShadow: '0 0 10px #00ff00'
+            mb: { xs: 3, sm: 4, md: 6 },
+            fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+            textShadow: '0 0 10px #00ff00',
+            px: { xs: 2, sm: 0 }
           }}
         >
           {loadingText}<span className="cursor-blink">_</span>
         </Typography>
       </motion.div>
 
-      <Grid container spacing={4} justifyContent="center">
+      <Grid 
+        container 
+        spacing={{ xs: 2, sm: 3, md: 4 }} 
+        justifyContent="center"
+      >
         {services.map((service, index) => (
           <Grid item xs={12} sm={6} md={4} key={service.title}>
             <motion.div
@@ -101,58 +106,51 @@ const Services = () => {
               <Card
                 sx={{
                   height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  background: 'rgba(0, 51, 0, 0.2)',
-                  backdropFilter: 'blur(8px)',
+                  backgroundColor: 'rgba(0, 51, 0, 0.7)',
                   border: '1px solid #00ff00',
-                  transition: 'all 0.3s ease-in-out',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: '0 0 20px rgba(0, 255, 0, 0.5)',
-                    border: '1px solid #00ff00',
+                    transform: 'translateY(-5px)',
+                    boxShadow: '0 0 20px rgba(0, 255, 0, 0.3)'
                   }
                 }}
               >
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                <CardContent sx={{ p: { xs: 2, sm: 3 }, height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                     {service.icon}
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        ml: 2,
-                        fontWeight: 'bold',
-                        letterSpacing: '0.1em',
-                        color: '#00ff00'
+                    <Typography 
+                      className="terminal-text"
+                      sx={{ 
+                        ml: 1,
+                        fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' }
                       }}
                     >
                       {service.title}
                     </Typography>
                   </Box>
-                  
-                  <Typography
-                    variant="body1"
-                    sx={{
+
+                  <Typography 
+                    className="terminal-text"
+                    sx={{ 
                       mb: 2,
-                      color: 'rgba(0, 255, 0, 0.8)',
-                      lineHeight: 1.6
+                      fontSize: { xs: '0.875rem', sm: '0.9rem', md: '1rem' },
+                      flexGrow: 1
                     }}
                   >
                     {service.description}
                   </Typography>
-                  
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 'auto' }}>
-                    {service.tags.map((tag) => (
-                      <Typography
+
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+                    {service.tags.map(tag => (
+                      <Typography 
                         key={tag}
-                        variant="caption"
-                        sx={{
+                        className="terminal-text"
+                        sx={{ 
+                          fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' },
+                          border: '1px solid #00ff00',
                           px: 1,
                           py: 0.5,
-                          border: '1px solid rgba(0, 255, 0, 0.3)',
-                          borderRadius: '4px',
-                          fontSize: '0.7rem',
-                          color: 'rgba(0, 255, 0, 0.7)'
+                          borderRadius: 1
                         }}
                       >
                         {tag}
@@ -168,29 +166,27 @@ const Services = () => {
 
       <Box sx={{ 
         display: 'flex', 
-        justifyContent: 'center',
-        mt: 6 
+        justifyContent: 'center', 
+        mt: { xs: 3, sm: 4, md: 6 }
       }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          transition={{ delay: 0.8 }}
         >
           <Button
-            variant="outlined"
-            size="large"
             onClick={() => navigate('/contact')}
             sx={{
               color: '#00ff00',
-              borderColor: '#00ff00',
-              fontSize: '1.1rem',
-              padding: '12px 32px',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
+              border: '1px solid #00ff00',
+              padding: { xs: '8px 16px', sm: '10px 24px' },
+              fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+              textTransform: 'none',
+              backgroundColor: 'rgba(0, 255, 0, 0.05)',
               '&:hover': {
-                borderColor: '#00ff00',
                 backgroundColor: 'rgba(0, 255, 0, 0.1)',
-                boxShadow: '0 0 15px rgba(0, 255, 0, 0.3)',
+                boxShadow: '0 0 20px rgba(0, 255, 0, 0.3)',
+                border: '1px solid #00ff00'
               }
             }}
           >

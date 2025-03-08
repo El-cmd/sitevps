@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Box, Typography, Grid } from '@mui/material';
+import { Container, Box, Typography, Grid, Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import { FaGithub, FaReact } from 'react-icons/fa';
 import { SiCplusplus, SiCodio } from 'react-icons/si';
@@ -24,7 +24,7 @@ const projects = [
     title: 'FT_IRC',
     description: '[PROJET_03] Serveur IRC - Communication en temps réel',
     github: 'https://github.com/El-cmd/ft_irc',
-    tags: ['C++', 'NETWORK', 'IRC'],
+    tags: ['C++', 'NETWORK', 'IRC', 'PROTOCOL'],
     icon: <SiCplusplus size={24} color="#00ff00" />
   },
   {
@@ -109,7 +109,7 @@ const projects = [
 const Projects = () => {
   const [activeProject, setActiveProject] = useState(null);
   const [loadingText, setLoadingText] = useState('');
-  const [loadedProjects, setLoadedProjects] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const text = "LOADING_PROJECTS...";
@@ -123,25 +123,35 @@ const Projects = () => {
         index++;
       } else {
         clearInterval(interval);
+        // Déclencher le chargement des projets immédiatement après
+        setTimeout(() => setIsLoaded(true), 300);
       }
-    }, 100);
+    }, 50); // Réduit à 50ms
 
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const loadProjects = () => {
-      const interval = setInterval(() => {
-        if (loadedProjects.length < projects.length) {
-          setLoadedProjects([...loadedProjects, projects[loadedProjects.length].title]);
-        } else {
-          clearInterval(interval);
-        }
-      }, 500);
-      return () => clearInterval(interval);
-    };
-    loadProjects();
-  }, [loadedProjects]);
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.3
+      }
+    }
+  };
 
   return (
     <Container>
@@ -156,112 +166,151 @@ const Projects = () => {
             className="terminal-text"
             sx={{
               textAlign: 'center',
-              marginBottom: '2rem',
+              marginBottom: '1rem',
               fontSize: 'calc(1.5rem + 1vw)',
               textShadow: '0 0 10px #00ff00'
             }}
           >
-            {loadedProjects.length < projects.length ? (
+            {!isLoaded ? (
               <>{loadingText}<span className="cursor-blink">_</span></>
             ) : (
               <>PROJECTS_LOADED<span className="cursor-blink">_</span></>
             )}
           </Typography>
+
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            mb: 4 
+          }}>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
+              <Button
+                component="a"
+                href="https://github.com/El-cmd"
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<FaGithub size={24} />}
+                sx={{
+                  color: '#00ff00',
+                  border: '1px solid #00ff00',
+                  padding: '10px 24px',
+                  fontSize: '1.1rem',
+                  textTransform: 'none',
+                  backgroundColor: 'rgba(0, 255, 0, 0.05)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                    boxShadow: '0 0 20px rgba(0, 255, 0, 0.3)',
+                    border: '1px solid #00ff00'
+                  }
+                }}
+              >
+                Voir tous mes projets sur GitHub
+              </Button>
+            </motion.div>
+          </Box>
         </motion.div>
 
-        <Grid container spacing={3}>
-          {projects.map((project, index) => (
-            <Grid item xs={12} md={6} key={project.title}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={loadedProjects.includes(project.title) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                onHoverStart={() => setActiveProject(project.title)}
-                onHoverEnd={() => setActiveProject(null)}
-              >
-                <Box
-                  className={activeProject === project.title ? 'glitch' : ''}
-                  sx={{
-                    p: 3,
-                    height: '100%',
-                    border: '1px solid #00ff00',
-                    backgroundColor: 'rgba(0, 255, 0, 0.05)',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-5px)',
-                      boxShadow: '0 0 20px rgba(0, 255, 0, 0.3)'
-                    }
-                  }}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate={isLoaded ? "show" : "hidden"}
+        >
+          <Grid container spacing={3}>
+            {projects.map((project, index) => (
+              <Grid item xs={12} md={6} key={project.title}>
+                <motion.div
+                  variants={item}
+                  onHoverStart={() => setActiveProject(project.title)}
+                  onHoverEnd={() => setActiveProject(null)}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    {project.icon}
+                  <Box
+                    className={activeProject === project.title ? 'glitch' : ''}
+                    sx={{
+                      p: 3,
+                      height: '100%',
+                      border: '1px solid #00ff00',
+                      backgroundColor: 'rgba(0, 255, 0, 0.05)',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-5px)',
+                        boxShadow: '0 0 20px rgba(0, 255, 0, 0.3)'
+                      }
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      {project.icon}
+                      <Typography 
+                        className="terminal-text"
+                        sx={{ 
+                          ml: 2,
+                          fontSize: '1.2rem'
+                        }}
+                      >
+                        {project.title}
+                      </Typography>
+                    </Box>
+
                     <Typography 
                       className="terminal-text"
                       sx={{ 
-                        ml: 2,
-                        fontSize: '1.2rem'
+                        mb: 2,
+                        minHeight: '60px',
+                        fontSize: '0.9rem'
                       }}
                     >
-                      {project.title}
+                      {project.description}
                     </Typography>
-                  </Box>
 
-                  <Typography 
-                    className="terminal-text"
-                    sx={{ 
-                      mb: 2,
-                      minHeight: '60px',
-                      fontSize: '0.9rem'
-                    }}
-                  >
-                    {project.description}
-                  </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+                      {project.tags.map(tag => (
+                        <Typography 
+                          key={tag}
+                          className="terminal-text"
+                          sx={{ 
+                            fontSize: '0.8rem',
+                            border: '1px solid #00ff00',
+                            px: 1,
+                            borderRadius: 1
+                          }}
+                        >
+                          {tag}
+                        </Typography>
+                      ))}
+                    </Box>
 
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-                    {project.tags.map(tag => (
-                      <Typography 
-                        key={tag}
-                        className="terminal-text"
-                        sx={{ 
-                          fontSize: '0.8rem',
-                          border: '1px solid #00ff00',
-                          px: 1,
-                          borderRadius: 1
+                    <motion.a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        textDecoration: 'none',
+                        color: '#00ff00'
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem'
                         }}
                       >
-                        {tag}
-                      </Typography>
-                    ))}
+                        <FaGithub />
+                        <Typography className="terminal-text">
+                          GitHub
+                        </Typography>
+                      </Box>
+                    </motion.a>
                   </Box>
-
-                  <motion.a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      textDecoration: 'none',
-                      color: '#00ff00'
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                      }}
-                    >
-                      <FaGithub />
-                      <Typography className="terminal-text">
-                        GitHub
-                      </Typography>
-                    </Box>
-                  </motion.a>
-                </Box>
-              </motion.div>
-            </Grid>
-          ))}
-        </Grid>
+                </motion.div>
+              </Grid>
+            ))}
+          </Grid>
+        </motion.div>
       </Box>
     </Container>
   );

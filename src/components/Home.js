@@ -48,7 +48,8 @@ const Home = () => {
       minHeight: '100vh', 
       display: 'flex', 
       alignItems: 'center',
-      mt: { xs: -8, sm: -10, md: -12 } 
+      mt: { xs: -4, sm: -6, md: -8 },
+      px: { xs: 2, sm: 3, md: 4 }
     }}>
       <Box
         sx={{
@@ -58,8 +59,8 @@ const Home = () => {
           justifyContent: 'center',
           alignItems: 'center',
           textAlign: 'center',
-          gap: 4,
-          py: { xs: 4, md: 6 },
+          gap: { xs: 2, sm: 3, md: 4 },
+          py: { xs: 4, sm: 5, md: 6 },
           position: 'relative'
         }}
       >
@@ -74,8 +75,8 @@ const Home = () => {
           <Typography 
             className="terminal-text"
             sx={{
-              fontSize: '1.2rem',
-              marginBottom: '2rem',
+              fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' },
+              marginBottom: { xs: '1.5rem', sm: '2rem' },
               opacity: systemReady ? 0 : 1
             }}
           >
@@ -91,9 +92,10 @@ const Home = () => {
               <Box
                 sx={{
                   position: 'relative',
-                  width: { xs: '200px', sm: '250px', md: '300px' },
-                  height: { xs: '200px', sm: '250px', md: '300px' },
-                  margin: '0 auto 2rem auto',
+                  width: { xs: '180px', sm: '220px', md: '280px' },
+                  height: { xs: '180px', sm: '220px', md: '280px' },
+                  margin: '0 auto',
+                  marginBottom: { xs: '1.5rem', sm: '2rem' },
                   '&::before': {
                     content: '""',
                     position: 'absolute',
@@ -152,8 +154,8 @@ const Home = () => {
             variant="h1" 
             className="terminal-text glitch"
             sx={{
-              fontSize: { xs: '2rem', sm: '3rem', md: '4rem' },
-              marginBottom: '1rem',
+              fontSize: 'clamp(1.5rem, 5vw, 4rem)',
+              marginBottom: { xs: '0.5rem', sm: '1rem' },
               textShadow: '0 0 10px #00ff00, 0 0 20px #00ff00'
             }}
           >
@@ -164,8 +166,8 @@ const Home = () => {
             variant="h2"
             className="terminal-text"
             sx={{
-              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
-              marginBottom: '2rem'
+              fontSize: 'clamp(1.2rem, 4vw, 2.5rem)',
+              marginBottom: { xs: '1.5rem', sm: '2rem' }
             }}
           >
             {titleText}<span className="cursor-blink">_</span>
@@ -180,7 +182,10 @@ const Home = () => {
               >
                 <Typography 
                   className="terminal-text"
-                  sx={{ marginBottom: '2rem' }}
+                  sx={{ 
+                    marginBottom: { xs: '1.5rem', sm: '2rem' },
+                    fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' }
+                  }}
                 >
                   STATUS: ONLINE<br />
                   LOCATION: FRANCE, PARIS<br />
@@ -193,38 +198,45 @@ const Home = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1 }}
               >
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Box sx={{ 
+                  display: 'flex', 
+                  gap: { xs: 1, sm: 2 }, 
+                  flexWrap: 'wrap', 
+                  justifyContent: 'center' 
+                }}>
                   <Button
                     component={Link}
                     to="/projets"
                     className="terminal-text"
                     sx={{
-                      border: '1px solid #00ff00',
                       color: '#00ff00',
-                      padding: '10px 20px',
+                      border: '1px solid #00ff00',
+                      padding: { xs: '8px 16px', sm: '10px 20px', md: '12px 24px' },
+                      fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
                       '&:hover': {
                         backgroundColor: 'rgba(0, 255, 0, 0.1)',
-                        boxShadow: '0 0 10px #00ff00',
+                        boxShadow: '0 0 20px rgba(0, 255, 0, 0.3)'
                       }
                     }}
                   >
-                    VOIR_PROJETS
+                    Voir mes projets
                   </Button>
                   <Button
                     component={Link}
                     to="/contact"
                     className="terminal-text"
                     sx={{
-                      border: '1px solid #00ff00',
                       color: '#00ff00',
-                      padding: '10px 20px',
+                      border: '1px solid #00ff00',
+                      padding: { xs: '8px 16px', sm: '10px 20px', md: '12px 24px' },
+                      fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
                       '&:hover': {
                         backgroundColor: 'rgba(0, 255, 0, 0.1)',
-                        boxShadow: '0 0 10px #00ff00',
+                        boxShadow: '0 0 20px rgba(0, 255, 0, 0.3)'
                       }
                     }}
                   >
-                    ÉTABLIR_CONNEXION
+                    Me contacter
                   </Button>
                 </Box>
               </motion.div>

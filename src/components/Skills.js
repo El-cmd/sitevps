@@ -13,37 +13,37 @@ const Skills = () => {
     { 
       category: 'PROGRAMMING_LANGUAGES', 
       items: [
-        { name: 'C++', level: 90 },
-        { name: 'C', level: 90 },
-        { name: 'Python', level: 40 },
-        { name: 'JavaScript', level: 40 }
+        { name: 'C++ ', level: 90 },
+        { name: 'C ', level: 90 },
+        { name: 'Python ', level: 40 },
+        { name: 'JavaScript ', level: 40 }
       ]
     },
     { 
       category: 'WEB_TECHNOLOGIES', 
       items: [
-        { name: 'React.js', level: 20 },
-        { name: 'Node.js', level: 20 },
-        { name: 'HTML5/CSS3', level: 80  },
-        { name: 'DJango/API REST', level: 60 }
+        { name: 'React ', level: 40 },
+        { name: 'Node ', level: 40 },
+        { name: 'HTML5/CSS3 ', level: 80  },
+        { name: 'DJango/API REST ', level: 60 }
       ]
     },
     { 
       category: 'DATABASE_SYSTEMS', 
       items: [
-        { name: 'MongoDB', level: 50 },
-        { name: 'MySQL', level: 50 },
-        { name: 'PostgreSQL', level: 50 }
+        { name: 'MongoDB ', level: 50 },
+        { name: 'MySQL ', level: 50 },
+        { name: 'PostgreSQL ', level: 50 }
       ]
     },
     { 
       category: 'TOOLS_AND_FRAMEWORKS', 
       items: [
-        { name: 'Git', level: 90 },
-        { name: 'Docker/Dev Ops', level: 80 },
-        { name: 'IA', level: 150 },
-        { name: 'Linux', level: 90 },
-        { name: 'Cybersecurity', level: 10 }
+        { name: 'Git ', level: 70 },
+        { name: 'Docker/Dev Ops ', level: 70 },
+        { name: 'IA ', level: 70 },
+        { name: 'Linux ', level: 90 },
+        { name: 'Cybersecurity ', level: 30 }
       ]
     }
   ], []);
