@@ -2,8 +2,6 @@
 
 Un portfolio moderne avec une esthétique "hacker" développé avec React et Material-UI. Le site présente mes compétences, projets et services en tant que développeur junior.
 
-![Portfolio Preview](src/assets/moi.jpeg)
-
 ## 🚀 Fonctionnalités
 
 - Design moderne avec thème "hacker"
