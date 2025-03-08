@@ -3,12 +3,14 @@ import { Container, Typography, Box, Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import '../styles/hacker.css';
+import moiImage from '../assets/moi.jpeg';
 
 const Home = () => {
   const [loadingText, setLoadingText] = useState('');
   const [nameText, setNameText] = useState('');
   const [titleText, setTitleText] = useState('');
   const [systemReady, setSystemReady] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     const loadSequence = async () => {
@@ -42,17 +44,22 @@ const Home = () => {
   }, []);
 
   return (
-    <Container>
+    <Container sx={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      alignItems: 'center',
+      mt: { xs: -8, sm: -10, md: -12 } 
+    }}>
       <Box
         sx={{
-          minHeight: '100vh',
+          width: '100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
           textAlign: 'center',
           gap: 4,
-          pt: 8,
+          py: { xs: 4, md: 6 },
           position: 'relative'
         }}
       >
@@ -62,6 +69,7 @@ const Home = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
+          style={{ width: '100%' }}
         >
           <Typography 
             className="terminal-text"
@@ -73,6 +81,72 @@ const Home = () => {
           >
             {loadingText}<span className="cursor-blink">_</span>
           </Typography>
+
+          {systemReady && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <Box
+                sx={{
+                  position: 'relative',
+                  width: { xs: '200px', sm: '250px', md: '300px' },
+                  height: { xs: '200px', sm: '250px', md: '300px' },
+                  margin: '0 auto 2rem auto',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: '-3px',
+                    left: '-3px',
+                    right: '-3px',
+                    bottom: '-3px',
+                    border: '2px solid #00ff00',
+                    animation: 'glitch 2s infinite',
+                    zIndex: 1
+                  },
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    right: '0',
+                    bottom: '0',
+                    background: 'linear-gradient(45deg, rgba(0,255,0,0.1) 0%, rgba(0,0,0,0) 100%)',
+                    zIndex: 2,
+                    pointerEvents: 'none'
+                  }
+                }}
+              >
+                <motion.img
+                  src={moiImage}
+                  alt="Valentin Loth"
+                  onLoad={() => setImageLoaded(true)}
+                  initial={{ filter: 'grayscale(100%) brightness(0.8)' }}
+                  animate={{
+                    filter: imageLoaded ? [
+                      'grayscale(100%) brightness(0.8)',
+                      'grayscale(0%) brightness(1)',
+                      'grayscale(100%) brightness(0.8)'
+                    ] : 'grayscale(100%) brightness(0.8)'
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatType: 'reverse'
+                  }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    position: 'relative',
+                    zIndex: 1,
+                    boxShadow: '0 0 20px rgba(0, 255, 0, 0.3)'
+                  }}
+                />
+              </Box>
+            </motion.div>
+          )}
 
           <Typography 
             variant="h1" 
