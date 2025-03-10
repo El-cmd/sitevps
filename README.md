@@ -1,129 +1,96 @@
-# Portfolio - Valentin Loth
+# Portfolio Multi-Sites avec Nginx Proxy Manager
 
-Un portfolio moderne avec une esthétique "hacker" développé avec React et Material-UI. Le site présente mes compétences, projets et services en tant que développeur junior.
+Ce projet est une configuration Docker pour héberger plusieurs sites web sur un VPS, avec le portfolio comme premier site. Il utilise Nginx Proxy Manager pour gérer facilement les domaines et les certificats SSL.
+
+## 📁 Structure du Projet
+
+```
+/
+├── nginx-proxy-manager/     # Gestion des domaines et SSL
+│   ├── docker-compose.yml
+│   ├── data/               # Configuration NPM (créé automatiquement)
+│   └── letsencrypt/       # Certificats SSL (créé automatiquement)
+│
+├── sites/
+│   └── portfolio/         # Site portfolio
+│       ├── srcs/         # Code source React
+│       ├── Dockerfile
+│       ├── docker-compose.yml
+│       └── Makefile      # Pour le développement local
+│
+└── Makefile              # Gestion globale du projet
+```
 
 ## 🚀 Fonctionnalités
 
-- Design moderne avec thème "hacker"
-- Animations fluides et effets visuels
-- Complètement responsive
-- Navigation intuitive
-- Sections :
-  - 🏠 Accueil avec présentation
-  - 💼 Projets avec liens GitHub
-  - 🛠 Services proposés
-  - 📊 Compétences avec barres de progression
-  - 📬 Page de contact
+- **Multi-Sites** : Capable d'héberger plusieurs sites sur un même VPS
+- **SSL Automatique** : Gestion automatique des certificats SSL via Let's Encrypt
+- **Interface d'Administration** : Interface web pour gérer les domaines et SSL
+- **Développement Local** : Configuration séparée pour le développement
 
-## 🛠 Technologies Utilisées
+## 🛠 Prérequis
 
-- **Frontend** :
-  - React.js
-  - Material-UI
-  - Framer Motion (animations)
-  - React Router
-  - CSS personnalisé
+- Docker et Docker Compose
+- Un VPS avec les ports nécessaires configurés
+- Un nom de domaine configuré
 
-## 🏗 Architecture du Projet
+## 📥 Installation
 
-```
-sitevps/
-├── src/
-│   ├── components/         # Composants React
-│   ├── styles/            # Fichiers CSS
-│   ├── assets/           # Images et ressources
-│   └── App.js            # Composant principal
-├── public/               # Fichiers statiques
-├── Dockerfile           # Configuration Docker
-├── docker-compose.yml   # Configuration Docker Compose
-├── nginx.conf           # Configuration Nginx container
-└── nginx-proxy.conf     # Configuration Nginx proxy
-```
-
-## 🚀 Installation et Déploiement
-
-### Développement Local
-
-```bash
-# Cloner le repository
-git clone https://github.com/votre-username/sitevps.git
-cd sitevps
-
-# Installer les dépendances
-npm install
-
-# Lancer en mode développement
-npm start
-```
-
-### Déploiement avec Docker
-
-1. **Prérequis**
+1. **Cloner le projet**
    ```bash
-   # Installation de Docker et Docker Compose
-   curl -fsSL https://get.docker.com -o get-docker.sh
-   sudo sh get-docker.sh
-   sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-   sudo chmod +x /usr/local/bin/docker-compose
+   git clone <votre-repo>
+   cd <votre-repo>
    ```
 
-2. **Construction et Lancement**
+2. **Configuration initiale**
    ```bash
-   # Construire et lancer les conteneurs
-   docker-compose up -d --build
+   # Configurer les accès nécessaires
+   # Démarrer les services
+   make
    ```
 
-3. **Accès**
-   - Le site sera accessible sur `http://votre-ip-vps`
+3. **Configuration Nginx Proxy Manager**
+   - Accéder à l'interface d'administration
+   - Configurer les identifiants
+   - Ajouter votre domaine et configurer SSL
 
-## 🔧 Configuration
+## 🔧 Commandes Make
 
-### Structure Docker
+### Commandes Globales (racine)
+- `make` : Démarre tout le système
+- `make down` : Arrête tous les services
+- `make logs-proxy` : Logs du proxy
+- `make logs-portfolio` : Logs du portfolio
+- `make clean` : Nettoie les conteneurs
+- `make fclean` : Nettoyage complet
 
-- **Portfolio Container** : Contient l'application React
-- **Nginx Proxy** : Reverse proxy pour gérer les requêtes
+### Commandes de Développement (portfolio)
+- `cd sites/portfolio && make dev` : Démarre le portfolio en mode dev
+- `cd sites/portfolio && make dev-d` : Démarre en arrière-plan
+- `cd sites/portfolio && make logs` : Affiche les logs
 
-### Ports Exposés
+## 🌐 Ajouter un Nouveau Site
 
-- 80 : HTTP
-- 443 : HTTPS (à configurer)
+1. Créer un nouveau dossier dans `sites/`
+2. Ajouter les fichiers nécessaires (Dockerfile, docker-compose.yml)
+3. Connecter au réseau `proxy-network`
+4. Configurer dans Nginx Proxy Manager
 
-## 🛡 Sécurité
+## 🔒 Sécurité
 
-- Configuration Nginx sécurisée
-- Headers HTTP sécurisés
-- Cache optimisé pour les assets statiques
+- Configuration des ports minimale
+- Certificats SSL automatiques
+- Interface d'administration sécurisée
+- Isolation des conteneurs via Docker
 
-## 🔄 Mise à Jour
+## 🛠 Maintenance
 
-```bash
-# Mettre à jour les conteneurs
-git pull
-docker-compose up -d --build
-```
+- Les certificats SSL se renouvellent automatiquement
+- Les logs sont accessibles via les commandes make
+- Sauvegardes recommandées des configurations
 
-## 📝 Maintenance
+## 📝 Notes
 
-### Logs
-
-```bash
-# Voir les logs des conteneurs
-docker-compose logs -f
-```
-
-### Backup
-
-```bash
-# Sauvegarder les configurations
-tar -czf backup.tar.gz docker-compose.yml nginx*.conf Dockerfile
-```
-
-## 🤝 Contact
-
-- Email : [votre-email]
-- GitHub : [votre-profil-github]
-- LinkedIn : [votre-profil-linkedin]
-
-## 📜 Licence
-
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+- Configuration de sécurité requise avant déploiement
+- Chaque site peut avoir sa propre configuration de développement
+- Les modifications de la configuration proxy sont persistantes
