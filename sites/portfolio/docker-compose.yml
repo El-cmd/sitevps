@@ -6,6 +6,10 @@ services:
       context: ./srcs    # Pointe vers le dossier srcs
       dockerfile: Dockerfile
     container_name: portfolio
-    ports:
-      - "8080:80"
     restart: unless-stopped
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    external: true

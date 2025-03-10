@@ -221,7 +221,6 @@ const Education = () => {
                         className="terminal-text"
                         sx={{ mb: 2 }}
                       >
-                        > ACHIEVEMENTS:
                       </Typography>
                       {item.achievements.map((achievement, index) => (
                         <motion.div
